@@ -1,0 +1,125 @@
+Total cells: 17
+CELL 0 markdown
+# Video 2.4 - Solving our problem using DBSCAN
+===
+CELL 1 markdown
+**Problem Statement**: Try out new-age bundled online marketing strategies which would require to group similiar products together irrespective of the segment.
+
+### To perform clustering using DBSCAN you will be following these steps:
+
+1) __Load the Dataset:__ Import the dataset into the Jupyter notebook environment.
+
+2) __Feature Selection:__ Choose the features from the dataset that are relevant for the problem statement.
+
+3) __Pre-process the data:__ Use appropriate pre-processing measures for the problem statement.
+
+4) __Apply DBSCAN Clustering:__ Use the DBSCAN algorithm to cluster the data based on the different number of clusters.
+
+5) __Find Optimal values:__ Find the optimal value fo
+===
+CELL 2 markdown
+### Step1: Load the dataset
+===
+CELL 3 code
+import pandas as pd
+import numpy as np
+import os
+
+os.chdir(r'C:\Users\ongja\Downloads\Intro_ML\Module6')
+data_preprocessed = pd.read_csv('Synergix_data_preprocessed_unsupervised_new.csv')
+data_preprocessed.head()
+===
+CELL 4 markdown
+### Step2: Feature Selection: Create an aggregated dataset and GroupBy SKU_ID
+===
+CELL 5 code
+# Define the aggregation operations
+aggregation = {
+    
+    'Page_traffic':'last',
+    'Organic Search Rank': 'last',
+    'Image_Count': 'last',
+    'Bullet_Count': 'last',
+    'Title_Count': 'last',
+    'Description_Length': 'last',
+    '1_Star_Rating': 'last',
+     '2_Star_Rating': 'last',
+     '3_Star_Rating': 'last',
+     '4_Star_Rating': 'last',
+     '5_Star_Rating': 'last',
+    'Unit_price':'last',
+    'Revenue($)': 'sum',
+}
+===
+CELL 6 code
+# Group by 'SKU_ID' and aggregate
+# data_selected = data_preprocessed.groupby('SKU_ID').agg(aggregation).reset_index()
+data_selected = data_preprocessed.groupby('SKU_ID').agg(aggregation)
+data_selected
+===
+CELL 7 markdown
+### Step3: Pre-process the data:  Use appropriate pre-processing measures for the problem statement
+===
+CELL 8 code
+from sklearn.preprocessing import StandardScaler
+
+# Standardize the numerical columns
+scaler = StandardScaler()
+data_scaled = scaler.fit_transform(data_selected)
+
+# Create a DataFrame for the scaled data
+data_scaled = pd.DataFrame(data_scaled, columns=data_selected.columns, index = data_selected.index)
+
+# Show the first few rows of the scaled DataFrame
+data_scaled.head()
+
+===
+CELL 9 code
+data_scaled.shape
+===
+CELL 10 markdown
+### Step4: Apply DBSCAN Clustering
+===
+CELL 11 code
+from sklearn.neighbors import NearestNeighbors
+
+# Use Nearest Neighbors to find distances to the 26th nearest neighbor
+nn = NearestNeighbors(n_neighbors=26).fit(data_scaled)
+distances, indices = nn.kneighbors(data_scaled)
+===
+CELL 12 code
+import numpy as np
+
+# Sort the distances
+distances = np.sort(distances, axis=0)
+distances = distances[:, 1]
+distances
+===
+CELL 13 markdown
+## Step5: Find Optimal values for min_samples and eps
+===
+CELL 14 code
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(10,6))
+plt.plot(distances)
+plt.title("k-distance Graph")
+plt.xlabel("Data Points sorted by distance")
+plt.ylabel("Epsilon")
+plt.grid(True)
+plt.show()
+===
+CELL 15 code
+from sklearn.cluster import DBSCAN
+
+# Apply DBSCAN clustering
+dbscan = DBSCAN(eps=3, min_samples=26)
+data_scaled['DBSCAN_cluster'] = dbscan.fit_predict(data_scaled)
+data_scaled
+===
+CELL 16 code
+# Check the number of clusters and noise points
+cluster_counts = data_scaled['DBSCAN_cluster'].value_counts()
+
+cluster_counts
+===
