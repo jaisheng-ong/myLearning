@@ -1,9 +1,7 @@
 # Generative AI: Elevate your Software Development Career
 ---
 
-To further strengthen your background, consider completing these courses from the following Professional Certificate programs:
-
-* [Generative AI: Introduction and Applications](https://www.coursera.org/learn/generative-ai-introduction-and-applications?specialization=generative-ai-for-software-developers)
+Course: [Generative AI: Introduction and Applications](https://www.coursera.org/learn/generative-ai-introduction-and-applications?specialization=generative-ai-for-software-developers)
 
 ## Tools & Software Used
 
