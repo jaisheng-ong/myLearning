@@ -1,0 +1,8 @@
+# Secrets and Obsidian vault config, at any depth
+**/.secrets/
+**/.obsidian/
+
+# Editor / OS / Python clutter
+**/.vs/
+**/__MACOSX/
+**/__pycache__/
