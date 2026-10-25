@@ -6,3 +6,13 @@
 **/.vs/
 **/__MACOSX/
 **/__pycache__/
+
+# Office temp/lock files
+~$*
+
+# Course datasets
+*.csv
+*.xls
+*.xlsx
+*.json
+*.xml
